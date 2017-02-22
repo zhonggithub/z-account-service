@@ -1,8 +1,8 @@
 /*
  * @Author: Zz
- * @Date: 2017-01-17 21:02:36
+ * @Date: 2017-02-22 10:38:26
  * @Last Modified by: Zz
- * @Last Modified time: 2017-02-22 10:38:01
+ * @Last Modified time: 2017-02-22 10:39:23
  */
 import { dbOrm, common } from '../common';
 
@@ -38,7 +38,7 @@ const imp = {
     return dbCriteria;
   },
 
-  resourceModule: () => dbOrm.collections.tb_directory,
+  resourceModule: () => dbOrm.collections.tb_group,
 };
 
 function convert2DBInfo(logicInfo) {

@@ -1,31 +1,27 @@
 /*
  * @Author: Zz
- * @Date: 2017-01-23 17:17:21
+ * @Date: 2017-02-22 10:32:09
  * @Last Modified by: Zz
- * @Last Modified time: 2017-01-23 17:52:48
+ * @Last Modified time: 2017-02-22 14:03:02
  */
 import Waterline from 'waterline';
 
 module.exports = Waterline.Collection.extend({
-  identity: 'tb_accountStormMapping',
-  tableName: 'tb_accountStormMapping',
+  identity: 'tb_group',
+  tableName: 'tb_group',
   connection: 'mongodb',
   schema: true,
   attributes: {
-    accountStoreId: {
+    directoryId: {
       type: 'string',
       required: true,
     },
-    applicationId: {
+    name: {
       type: 'string',
       required: true,
     },
-    isDefaultAccountStore: {
-      type: 'boolean',
-      defaultsTo: false,
-    },
-    isDefaultGroupStore: {
-      type: 'boolean',
+    description: {
+      type: 'string',
       defaultsTo: false,
     },
     tenantId: {

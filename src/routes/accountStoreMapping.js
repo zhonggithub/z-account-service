@@ -1,8 +1,8 @@
 import { verify } from 'z-error';
 import { common } from '../common';
-import { accountStormMappingProxy } from '../proxys';
+import { accountStoreMappingProxy } from '../proxys';
 
-const prp = accountStormMappingProxy;
+const prp = accountStoreMappingProxy;
 
 export default {
   async create(ctx) {

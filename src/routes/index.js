@@ -8,6 +8,8 @@ import tenant from './tenant';
 import application from './application';
 import directory from './directory';
 import tokens from './token';
+import group from './group';
+import accountStoreMapping from './accountStoreMapping';
 
 const getBody = async (ctx, next) => {
   try {
@@ -31,6 +33,7 @@ const auth = async (ctx, next) => {
   await next();
 };
 
+// 平台管理人员认证
 const auth1 = async (ctx, next) => {
   const { token } = ctx.header;
   try {
@@ -80,14 +83,30 @@ router.get(directoryBaseUrl, auth, directory.list);
 router.post(directoryUrl, auth, getBody, directory.update);
 router.delete(directoryUrl, auth, directory.logicDelete);
 
+// group
+const groupBaseUrl = `${baseUrl}/directories/:directoryId/groups`;
+const groupUrl = `${baseUrl}/groups/:id`;
+router.post(groupBaseUrl, auth, getBody, group.create);
+router.get(groupUrl, auth, group.retrieve);
+router.get(groupBaseUrl, auth, group.list);
+router.post(groupUrl, auth, getBody, group.update);
+router.delete(groupUrl, auth, group.logicDelete);
+
 // account
 const accountBaseUrl = `${baseUrl}/directories/:directoryId/accounts`;
 const accountUrl = `${baseUrl}/accounts/:id`;
 router.post(accountBaseUrl, auth, getBody, account.create);
 router.post(accountUrl, auth, getBody, account.update);
 router.get(accountUrl, auth, account.retrieve);
-router.get(`${baseUrl}/directories/:directoryId/accounts`, auth, account.list);
+router.get(accountBaseUrl, auth, account.list);
 router.delete(accountUrl, auth, account.logicDelete);
+
+const accountStoreMappingBaseUrl = `${baseUrl}/accountStoreMappings`;
+const accountStoreMappingUrl = `${accountStoreMappingBaseUrl}/accountStoreMappings`;
+router.post(accountStoreMappingBaseUrl, auth, getBody, accountStoreMapping.create);
+router.post(accountStoreMappingUrl, auth, getBody, accountStoreMapping.update);
+router.get(accountStoreMapping, auth, accountStoreMapping.retrieve);
+router.get(accountStoreMappingUrl, auth, accountStoreMapping.list);
 
 router.get('*', async (ctx) => {
   ctx.type = 'html';

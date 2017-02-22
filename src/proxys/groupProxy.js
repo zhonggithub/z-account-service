@@ -1,12 +1,13 @@
 /*
  * @Author: Zz
- * @Date: 2017-01-23 18:08:18
+ * @Date: 2017-02-22 10:40:09
  * @Last Modified by: Zz
- * @Last Modified time: 2017-01-23 18:29:58
+ * @Last Modified time: 2017-02-22 14:54:30
  */
+import querystring from 'querystring';
 import { verify } from 'z-error';
 import { common, config } from '../common';
-import { accountStormMappingOperator } from '../operators';
+import { groupOperator } from '../operators';
 
 function isValidData(info) {
   const error = verify(info, ['name']);
@@ -18,7 +19,7 @@ function isValidData(info) {
 
 async function isExist(info) {
   try {
-    const result = await accountStormMappingOperator.list({ name: info.name });
+    const result = await groupOperator.list({ name: info.name });
     return {
       is: result.length !== 0,
       description: '',
@@ -31,18 +32,17 @@ async function isExist(info) {
 
 function retData(body) {
   const ret = common.filterData(body, ['deleteFlag', 'id']);
-  ret.href = `${config.domainHost}/api/account/v1/accountStormMappings/${body.id}`;
-  ret.application = {
-    href: `${config.domainHost}/api/account/v1/applications/${body.applicationId}`,
-  };
-  ret.accountStorm = {
-    href: `${config.domainHost}/api/account/v1/${body.accountStormId}`,
+  ret.href = `${config.domainHost}/api/account/v1/groups/${body.id}`;
+  ret.tenant = {
+    href: `${config.domainHost}/api/account/v1/tenants/${body.tenantId}`,
   };
   return ret;
 }
 
 function retListData(query, items, size) {
-  const href = `${config.domainHost}/api/account/v1/accountStormMappings`;
+  const directoryId = String(query.directoryId);
+  delete query.directoryId;
+  const href = `${config.domainHost}/api/account/v1/directories/${directoryId}/groups?${querystring.stringify(query)}`;
   return common.retListData(query, items, size, retData, href);
 }
 
@@ -51,7 +51,7 @@ function isValidUpateData() {
 }
 
 module.exports = {
-  resourceProxy: accountStormMappingOperator,
+  resourceProxy: groupOperator,
   isValidData,
   isExist,
   retData,

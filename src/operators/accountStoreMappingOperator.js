@@ -2,7 +2,7 @@
  * @Author: Zz
  * @Date: 2017-01-23 18:02:00
  * @Last Modified by: Zz
- * @Last Modified time: 2017-02-04 18:01:41
+ * @Last Modified time: 2017-02-22 16:41:37
  */
 import { dbOrm, common } from '../common';
 
@@ -49,7 +49,7 @@ const imp = {
     dbCriteria.deleteFlag = { '!': 1 };
     return dbCriteria;
   },
-  resourceModule: () => dbOrm.collections.tb_accountStormMapping,
+  resourceModule: () => dbOrm.collections.tb_accountStoreMapping,
   ResourceDBInfo,
 };
 

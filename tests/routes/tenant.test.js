@@ -31,7 +31,6 @@ test.before(async (t) => {
   });
   if (tokenRes.status >= 400) console.log(tokenRes.text);
   token = tokenRes.body.data.token;
-  console.log(token);
   const res = await request.post('/api/account/v1/tenants').send(mockTenant).set('token', token);
   if (res.status >= 400) console.log(res.text);
   t.is(res.status, 201);

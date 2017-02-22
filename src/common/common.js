@@ -381,9 +381,8 @@ class Common {
       offset: this.ifReturnNum(query.offset, this.defaultOffet),
       limit: this.ifReturnNum(query.limit, this.defaultLimit),
       size,
-      items: [],
+      items: data.map(item => retFunction(item)),
     };
-    retData.items = data.map(item => retFunction(item));
     if (href) {
       retData.href = href;
     }
