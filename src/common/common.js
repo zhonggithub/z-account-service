@@ -388,6 +388,18 @@ class Common {
     }
     return retData;
   }
+
+  verifyValue(des, value) {
+    if (Array.isArray(value)) {
+      for (const item of value) {
+        if (item !== des) {
+          return false;
+        }
+      }
+      return true;
+    }
+    return des === value;
+  }
 }
 
 export default new Common();

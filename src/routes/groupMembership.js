@@ -1,8 +1,14 @@
+/*
+ * @Author: Zz
+ * @Date: 2017-02-22 10:51:01
+ * @Last Modified by: Zz
+ * @Last Modified time: 2017-02-23 10:11:16
+ */
 import { verify } from 'z-error';
 import { common } from '../common';
-import { accountStoreMappingProxy } from '../proxys';
+import { groupMembershipProxy } from '../proxys';
 
-const prp = accountStoreMappingProxy;
+const prp = groupMembershipProxy;
 
 export default {
   async create(ctx) {
@@ -27,7 +33,7 @@ export default {
   },
 
   async update(ctx) {
-    const body = ctx.query.body;
+    const body = ctx.request.body;
     const judge = prp.isValidUpateData(body);
     if (!judge.is) {
       ctx.throw(judge.error, 422);
@@ -95,6 +101,7 @@ export default {
     }
     ctx.request.query.offset = common.ifReturnNum(ctx.request.query.offset, 0);
     ctx.request.query.limit = common.ifReturnNum(ctx.request.query.limit, 25);
+    ctx.request.query.directoryId = ctx.params.directoryId;
     const result = await prp.resourceProxy.list(ctx.request.query);
     const total = await prp.resourceProxy.count(ctx.request.query);
     ctx.body = prp.retListData(ctx.request.query, result, total);

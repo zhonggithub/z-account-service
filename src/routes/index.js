@@ -10,6 +10,7 @@ import directory from './directory';
 import tokens from './token';
 import group from './group';
 import accountStoreMapping from './accountStoreMapping';
+import groupMembership from './groupMembership';
 
 const getBody = async (ctx, next) => {
   try {
@@ -72,7 +73,7 @@ router.get(applicationUrl, auth, application.retrieve);
 router.get(applicationBaseUrl, auth, application.list);
 router.post(applicationUrl, auth, getBody, application.update);
 router.delete(applicationUrl, auth, application.logicDelete);
-// router.post(`${applicationUrl}/loginAttempts`, auth, application.login);
+router.post(`${applicationUrl}/loginAttempts`, auth, application.loginAttempts);
 
 // directory
 const directoryBaseUrl = `${baseUrl}/directories`;
@@ -101,12 +102,23 @@ router.get(accountUrl, auth, account.retrieve);
 router.get(accountBaseUrl, auth, account.list);
 router.delete(accountUrl, auth, account.logicDelete);
 
+// accountStoreMapping
 const accountStoreMappingBaseUrl = `${baseUrl}/accountStoreMappings`;
-const accountStoreMappingUrl = `${accountStoreMappingBaseUrl}/accountStoreMappings`;
+const accountStoreMappingUrl = `${accountStoreMappingBaseUrl}/:id`;
 router.post(accountStoreMappingBaseUrl, auth, getBody, accountStoreMapping.create);
 router.post(accountStoreMappingUrl, auth, getBody, accountStoreMapping.update);
-router.get(accountStoreMapping, auth, accountStoreMapping.retrieve);
-router.get(accountStoreMappingUrl, auth, accountStoreMapping.list);
+router.get(accountStoreMappingUrl, auth, accountStoreMapping.retrieve);
+router.get(accountStoreMappingBaseUrl, auth, accountStoreMapping.list);
+router.delete(accountStoreMappingUrl, auth, accountStoreMapping.logicDelete);
+
+// groupMembership
+const groupMembershipBaseUrl = `${baseUrl}/groupMemberships`;
+const groupMembershipUrl = `${groupMembershipBaseUrl}/:id`;
+router.post(groupMembershipBaseUrl, auth, getBody, groupMembership.create);
+router.post(groupMembershipUrl, auth, getBody, groupMembership.update);
+router.get(groupMembershipUrl, auth, groupMembership.retrieve);
+router.get(groupMembershipBaseUrl, auth, groupMembership.list);
+router.delete(groupMembershipUrl, auth, groupMembership.logicDelete);
 
 router.get('*', async (ctx) => {
   ctx.type = 'html';

@@ -2,20 +2,14 @@
  * @Author: Zz
  * @Date: 2017-01-23 18:02:00
  * @Last Modified by: Zz
- * @Last Modified time: 2017-02-23 10:38:41
+ * @Last Modified time: 2017-02-23 10:37:32
  */
 import { dbOrm, common } from '../common';
 
 class ResourceDBInfo {
   constructor(logicInfo) {
-    if (logicInfo.accountStore.href.indexOf('groups') !== -1) {
-      this.accountStoreId = common.getIdInHref(logicInfo.accountStore.href, '/groups');
-    } else {
-      this.accountStoreId = common.getIdInHref(logicInfo.accountStore.href, '/directories/');
-    }
-    this.applicationId = common.getIdInHref(logicInfo.application.href, '/applications/');
-    this.tenantId = logicInfo.tenantId;
-    this.isDefaultAccountStore = common.ifReturnBo(logicInfo.isDefaultAccountStore, false);
+    this.groupId = common.getIdInHref(logicInfo.group.href, '/groups');
+    this.accountId = common.getIdInHref(logicInfo.account.href, '/accounts/');
   }
 }
 
@@ -49,7 +43,7 @@ const imp = {
     dbCriteria.deleteFlag = { '!': 1 };
     return dbCriteria;
   },
-  resourceModule: () => dbOrm.collections.tb_account_store_mapping,
+  resourceModule: () => dbOrm.collections.tb_group_membership,
   ResourceDBInfo,
 };
 

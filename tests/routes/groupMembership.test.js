@@ -6,10 +6,11 @@ import { dbOrm, common } from '../../src/common';
 test.afterEach.always(() => {
   fetchMock.restore();
 });
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
 
+const mockGroup = {
+  name: `grop ${Math.random()}00000000`,
+  descriptiomn: `${Math.random()}1210`,
+};
 const mockDirectory = {
   name: `zz directory ${Math.random()}`,
   description: 'test directoru',
@@ -17,21 +18,24 @@ const mockDirectory = {
     remark: 'test customData',
   },
 };
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
-const mockApplication = {
-  name: `zz application${Math.random()}`,
-  description: 'test app',
-  customData: {
-    remark: 'test customData',
-  },
+const mockAccount = {
+  name: `${Math.random()}00000000`,
+  account: `${Math.random()}1210`,
+  password: '2536',
+  email: `${Math.random()}1210@qq.com`,
+  tel: `${Math.random()}00000000`,
 };
 
 let gData = null;
 let token = null;
 let directoryUrl = null;
-let appUrl = null;
 let id = null;
-
+let groupUrl = null;
+let accountUrl = null;
 test.before(async (t) => {
   while (!dbOrm.models.collections) {
     await sleep(1000);
@@ -47,40 +51,43 @@ test.before(async (t) => {
   if (res1.status >= 400) console.log(res1.text);
   t.is(res1.status, 201);
   const tmp = res1.body.data;
-  directoryUrl = tmp.href;
-
-  const res2 = await request.post('/api/account/v1/applications').set('token', token)
-  .send(mockApplication);
-  if (res2.status >= 400) console.log(res2.text);
-  t.is(res2.status, 201);
-  appUrl = res2.body.data.href;
-
-  const mock = {
-    accountStore: { href: directoryUrl },
-    application: { href: appUrl },
-  };
-  const res = await request.post('/api/account/v1/accountStoreMappings').send(mock).set('token', token);
+  directoryUrl = tmp.href.replace('http://localhost:3000', '');
+  const res = await request.post(`${directoryUrl}/groups`).send(mockGroup).set('token', token);
   if (res.status >= 400) console.log(res.text);
   t.is(res.status, 201);
-  gData = res.body.data;
-  id = common.getIdInHref(gData.href, '/accountStoreMappings/');
+  const group = res.body.data;
+  groupUrl = group.url;
+
+  const resAccount = await request.post(`${directoryUrl}/accounts`).send(mockAccount).set('token', token);
+  if (resAccount.status >= 400) console.log(resAccount.text);
+  t.is(resAccount.status, 201);
+  const account = resAccount.body.data;
+  accountUrl = account.href;
+
+  const res2 = await request.post('/api/account/v1/groupMemberships').send({
+    account: { href: account.href },
+    group: { href: group.href },
+  }).set('token', token);
+  if (res2.status >= 400) console.log(res2.text);
+  t.is(res2.status, 201);
+  gData = res2.body.data;
+  id = common.getIdInHref(gData.href, '/groupMemberships/');
   return Promise.resolve({});
 });
 
-test('get /api/account/v1/accountStoreMappings/:id ok', async (t) => {
-  const url = `/api/account/v1/accountStoreMappings/${id}`;
+test('get /api/account/v1/groupMemberships/:id ok', async (t) => {
+  const url = `/api/account/v1/groupMemberships/${id}`;
   const res = await request.get(url).set('token', token);
   if (res.status >= 400) console.log(res.text);
   t.is(res.status, 200);
-  // console.log(res.body.data);
   const tmp = res.body.data;
   t.is(tmp.id, gData.id);
-  t.is(tmp.name, gData.name);
-  t.is(tmp.description, gData.description);
+  t.is(tmp.group.href, gData.group.href);
+  t.is(tmp.account.href, gData.account.href);
 });
 
-// test('post /api/account/v1/accountStoreMappings/:id ok', async (t) => {
-//   const url = `/api/account/v1/accountStoreMappings/${id}`;
+// test('post /api/account/v1/groupMemberships/:id ok', async (t) => {
+//   const url = `/api/account/v1/groupMemberships/${id}`;
 //   mock.name = `${Math.random()}zz`;
 //   mock.description = `${Math.random()}98767`;
 //   const res = await request.post(url).send(mock).set('token', token);
@@ -93,16 +100,16 @@ test('get /api/account/v1/accountStoreMappings/:id ok', async (t) => {
 //   t.is(tmp.description, mock.description);
 // });
 
-test('get /api/account/v1/accountStoreMappings ok', async (t) => {
-  const url = '/api/account/v1/accountStoreMappings';
+test('get /api/account/v1/groupMemberships ok', async (t) => {
+  const url = `${directoryUrl}/groupMemberships`;
   const res = await request.get(url).set('token', token);
   if (res.status >= 400) console.log(res.text);
   t.is(res.status, 200);
   // console.log(res.body.data);
 });
 
-test('delete /api/account/v1/accountStoreMappings/:id ok', async (t) => {
-  const url = `/api/account/v1/accountStoreMappings/${id}`;
+test('delete /api/account/v1/groupMemberships/:id ok', async (t) => {
+  const url = `/api/account/v1/groupMemberships/${id}`;
   const res = await request.delete(url).set('token', token);
   if (res.status >= 400) console.log(res.text);
   t.is(res.status, 204);

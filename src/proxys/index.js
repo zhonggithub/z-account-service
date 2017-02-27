@@ -4,6 +4,7 @@ import applicationProxy from './applicationProxy';
 import directoryProxy from './directoryProxy';
 import accountStoreMappingProxy from './accountStoreMappingProxy';
 import groupProxy from './groupProxy';
+import groupMembershipProxy from './groupMembershipProxy';
 
 module.exports = {
   accountProxy,
@@ -12,4 +13,5 @@ module.exports = {
   directoryProxy,
   accountStoreMappingProxy,
   groupProxy,
+  groupMembershipProxy,
 };
