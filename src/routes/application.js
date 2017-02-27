@@ -2,13 +2,13 @@
  * @Author: Zz
  * @Date: 2017-01-16 22:10:38
  * @Last Modified by: Zz
- * @Last Modified time: 2017-02-27 18:38:51
+ * @Last Modified time: 2017-02-27 22:35:34
  */
 import lodash from 'lodash';
 import { verify, ZError } from 'z-error';
 import { common, util, config } from '../common';
 import { applicationProxy } from '../proxys';
-import { directoryOperator, accountOperator, accountStoreMappingOperator, groupOperator } from '../operators';
+import { directoryOperator, accountOperator, accountStoreMappingOperator, groupOperator, groupMembershipOperator } from '../operators';
 
 const prp = applicationProxy;
 export default {
@@ -214,13 +214,17 @@ export default {
     const searchResults = await Promise.all(stores.map(async (item) => {
       if (item.accountStoreType === 1) {
         const groups = await groupOperator.list({ id: item.accountStoreId });
-        if (groups.length !== 1 && groups[0].status !== 'ENABLE') {
+        if (groups.length !== 1 || groups[0].status !== 'ENABLE') {
+          return false;
+        }
+        const groupMembership = await groupMembershipOperator.list({ accountId: account.id, groupId: groups[0].id});
+        if (groupMembership.length !== 1) {
           return false;
         }
         return true;
       }
       const directories = await directoryOperator.list({ id: item.accountStoreId });
-      if (directories.length !== 1 && directories[0].status !== 'ENABLE') {
+      if (directories.length !== 1 || directories[0].status !== 'ENABLE' || directories[0].id !== account.directoryId) {
         return false;
       }
       return true;
