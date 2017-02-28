@@ -1,4 +1,5 @@
 import Router from 'koa-router';
+import moment from 'moment';
 import rawBody from 'raw-body';
 import fs from 'fs';
 import jwt from 'jsonwebtoken';
@@ -26,6 +27,9 @@ const auth = async (ctx, next) => {
   const { token } = ctx.header;
   try {
     const tokenData = jwt.verify(token, config.jwtKey);
+    if (moment().unix() > tokenData.payload.exp) {
+      ctx.throw({ message: 'token已过期' }, 401);
+    }
     ctx.request.token = tokenData;
     ctx.req.token = tokenData;
   } catch (err) {
@@ -39,6 +43,9 @@ const auth1 = async (ctx, next) => {
   const { token } = ctx.header;
   try {
     const tokenData = jwt.verify(token, config.jwtKey);
+    if (moment().unix() > tokenData.payload.exp) {
+      ctx.throw({ message: 'token已过期' }, 401);
+    }
     if (tokenData.key !== config.platormTeanantKey) {
       ctx.throw({ message: '无权访问！' }, 401);
     }
