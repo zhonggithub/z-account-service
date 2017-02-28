@@ -11,21 +11,21 @@ export default {
   /** 通过IP 白名单获取token */
   async retrieveByIpList(ctx) {
     const { key, secret } = ctx.request.body;
-    let isOk = false;
-    if (process.env.NODE_ENV === 'test') {
-      isOk = true;
-    } else {
-      for (const ip of config.ipList) {
-        if (ip === ctx.ip) {
-          isOk = true;
-          break;
-        }
-      }
-    }
-    if (!isOk) {
-      ctx.throw({ code: '422', message: '无权限访问！' }, 500);
-      return;
-    }
+    // let isOk = false;
+    // if (process.env.NODE_ENV === 'test') {
+    //   isOk = true;
+    // } else {
+    //   for (const ip of config.ipList) {
+    //     if (ip === ctx.ip) {
+    //       isOk = true;
+    //       break;
+    //     }
+    //   }
+    // }
+    // if (!isOk) {
+    //   ctx.throw({ code: '422', message: '无权限访问！' }, 500);
+    //   return;
+    // }
     const tmpSecret = util.md5Encode(util.aesEncode(secret, config.aesKey));
     const ret = await tenantOperator.findOne({
       key,

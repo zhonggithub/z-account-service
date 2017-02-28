@@ -2,7 +2,7 @@
  * @Author: Zz
  * @Date: 2017-01-14 21:54:41
  * @Last Modified by: Zz
- * @Last Modified time: 2017-02-04 15:58:24
+ * @Last Modified time: 2017-02-28 15:46:21
  */
 import { dbOrm, common, util, config } from '../common';
 
@@ -16,6 +16,7 @@ class ResourceLogicInfo {
     this.customData = dbInfo.customData;
     this.createdAt = dbInfo.createdAt;
     this.updtedAt = dbInfo.updatedAt;
+    this.tenantId = dbInfo.tenantId;
   }
 }
 
@@ -28,6 +29,7 @@ class ResourceDBInfo {
     this.name = logicInfo.name;
     this.customData = logicInfo.customData;
     this.directoryId = logicInfo.directoryId;
+    this.tenantId = logicInfo.tenantId;
   }
 }
 

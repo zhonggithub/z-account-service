@@ -2,7 +2,7 @@
  * @Author: Zz
  * @Date: 2017-01-16 22:10:38
  * @Last Modified by: Zz
- * @Last Modified time: 2017-02-27 22:35:34
+ * @Last Modified time: 2017-02-28 15:31:26
  */
 import lodash from 'lodash';
 import { verify, ZError } from 'z-error';
@@ -217,7 +217,7 @@ export default {
         if (groups.length !== 1 || groups[0].status !== 'ENABLE') {
           return false;
         }
-        const groupMembership = await groupMembershipOperator.list({ accountId: account.id, groupId: groups[0].id});
+        const groupMembership = await groupMembershipOperator.list({ accountId: account.id, groupId: groups[0].id });
         if (groupMembership.length !== 1) {
           return false;
         }

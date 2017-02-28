@@ -19,6 +19,7 @@ export default {
       ctx.throw(err, 409);
       return;
     }
+    body.tenantId = ctx.request.token.tId;
     body.directoryId = ctx.params.directoryId;
     const result = await prp.resourceProxy.create(body);
     const resData = prp.retData(result);

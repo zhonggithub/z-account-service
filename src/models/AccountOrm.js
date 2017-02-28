@@ -20,6 +20,10 @@ module.exports = Waterline.Collection.extend({
       type: 'string',
       required: true,
     },
+    tenantId: {
+      type: 'string',
+      required: true,
+    },
     directoryId: {
       type: 'string',
       required: true,

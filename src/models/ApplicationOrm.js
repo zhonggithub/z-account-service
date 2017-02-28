@@ -2,7 +2,7 @@
  * @Author: Zz
  * @Date: 2017-01-16 21:47:09
  * @Last Modified by: Zz
- * @Last Modified time: 2017-01-16 23:24:51
+ * @Last Modified time: 2017-02-28 14:27:26
  */
 import Waterline from 'waterline';
 
@@ -15,10 +15,10 @@ module.exports = Waterline.Collection.extend({
     name: {
       type: 'string',
       unique: true,
+      required: true,
     },
     description: {
       type: 'string',
-      unique: true,
     },
     status: {
       type: 'string',
