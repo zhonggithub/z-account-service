@@ -1,7 +1,13 @@
+/*
+ * @Author: Zz
+ * @Date: 2017-03-01 11:22:33
+ * @Last Modified by: Zz
+ * @Last Modified time: 2017-03-01 11:45:13
+ */
 import moment from 'moment';
 import jwt from 'jsonwebtoken';
 import { config, util } from '../common';
-import { tenantOperator } from '../operators';
+import { tenantOperator, accountOperator } from '../operators';
 
 const tokenRole = {
   IP_TOKEN: 'IP_TOKEN',
@@ -35,6 +41,41 @@ export default {
       ctx.throw({ code: '404', message: 'tenant的key或secret错误！' }, 404);
       return;
     }
+    const payload = {
+      iat: moment().unix(),
+      exp: moment().add(2, 'h').unix(),
+      tId: ret.id,
+      key: ret.key,
+      tR: tokenRole.IP_TOKEN,
+    };
+    const token = jwt.sign(payload, config.jwtKey);
+
+    ctx.body = { token };
+    ctx.status = 200;
+  },
+  async retrieveByAccount(ctx) {
+    const { key, account, passwod } = ctx.request.body;
+    const ret = await tenantOperator.findOne({
+      key,
+    });
+    if (!ret) {
+      ctx.throw({ code: '404', message: 'tenant的key或secret错误！' }, 404);
+    }
+
+    const accountRes = await accountOperator.findOne({
+      account,
+      passwod,
+    });
+    if (!accountRes) {
+      ctx.throw({ code: '404', message: '账号或密码错误！' }, 404);
+    }
+    if (!accountRes.customData.z_platorm) {
+      ctx.throw({ code: '401', message: '该账号没有权限!' }, 401);
+    }
+    if (ret.id !== accountRes.tenantId) {
+      ctx.throw({ code: '404', message: '账号与租户（tenant）不匹配!' }, 404);
+    }
+
     const payload = {
       iat: moment().unix(),
       exp: moment().add(2, 'h').unix(),

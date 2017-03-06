@@ -2,7 +2,7 @@
  * @Author: Zz
  * @Date: 2017-01-16 22:10:38
  * @Last Modified by: Zz
- * @Last Modified time: 2017-02-28 15:31:26
+ * @Last Modified time: 2017-03-01 10:00:14
  */
 import lodash from 'lodash';
 import { verify, ZError } from 'z-error';
@@ -236,5 +236,6 @@ export default {
       ctx.threow(error2, 404);
     }
     ctx.status = 200;
+    ctx.body = account;
   },
 };
