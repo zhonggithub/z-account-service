@@ -1,7 +1,7 @@
 import test from 'ava';
 import fetchMock from 'fetch-mock';
 import request from '../helpers/request';
-import { dbOrm, common } from '../../src/common';
+import { dbOrm, common, config } from '../../src/common';
 
 test.afterEach.always(() => {
   fetchMock.restore();
@@ -33,13 +33,13 @@ test.before(async (t) => {
   while (!dbOrm.models.collections) {
     await sleep(1000);
   }
-  const tokenRes = await request.post('/api/account/v1/tokens').send({
+  const tokenRes = await request.post(`${config.uriPrefix}/tokens`).send({
     key: 'zt001',
     secret: 'zz^&(^)',
   });
   if (tokenRes.status >= 400) console.log(tokenRes.text);
   token = tokenRes.body.data.token;
-  const res1 = await request.post('/api/account/v1/directories').set('token', token)
+  const res1 = await request.post(`${config.uriPrefix}/directories`).set('token', token)
   .send(mockDirectory);
   if (res1.status >= 400) console.log(res1.text);
   t.is(res1.status, 201);
@@ -53,8 +53,8 @@ test.before(async (t) => {
   return Promise.resolve({});
 });
 
-test('get /api/account/v1/accounts/:id ok', async (t) => {
-  const url = `/api/account/v1/accounts/${accountId}`;
+test(`get ${config.uriPrefix}/accounts/:id ok`, async (t) => {
+  const url = `${config.uriPrefix}/accounts/${accountId}`;
   const res = await request.get(url).set('token', token);
   if (res.status >= 400) console.log(res.text);
   t.is(res.status, 200);
@@ -65,8 +65,8 @@ test('get /api/account/v1/accounts/:id ok', async (t) => {
   t.is(tmp.account, account.account);
 });
 
-test('post /api/account/v1/accounts/:id ok', async (t) => {
-  const url = `/api/account/v1/accounts/${accountId}`;
+test(`post ${config.uriPrefix}/accounts/:id ok`, async (t) => {
+  const url = `${config.uriPrefix}/accounts/${accountId}`;
   mockAccount.name = `${Math.random()}zz`;
   mockAccount.tel = `${Math.random()}98767`;
   const res = await request.post(url).send(mockAccount).set('token', token);
@@ -80,7 +80,7 @@ test('post /api/account/v1/accounts/:id ok', async (t) => {
   t.is(tmp.tel, mockAccount.tel);
 });
 
-test('get /api/account/v1/accounts ok', async (t) => {
+test(`get ${config.uriPrefix}/accounts ok`, async (t) => {
   const url = `${directoryUrl}/accounts?name=${account.name}`;
   const res = await request.get(url).set('token', token);
   if (res.status >= 400) console.log(res.text);
@@ -88,8 +88,8 @@ test('get /api/account/v1/accounts ok', async (t) => {
   // console.log(res.body.data);
 });
 
-test('delete /api/account/v1/accounts/:id ok', async (t) => {
-  const url = `/api/account/v1/accounts/${accountId}`;
+test(`delete ${config.uriPrefix}/accounts/:id ok`, async (t) => {
+  const url = `${config.uriPrefix}/accounts/${accountId}`;
   const res = await request.delete(url).set('token', token);
   if (res.status >= 400) console.log(res.text);
   t.is(res.status, 204);

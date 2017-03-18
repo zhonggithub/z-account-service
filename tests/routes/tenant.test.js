@@ -1,7 +1,7 @@
 import test from 'ava';
 import fetchMock from 'fetch-mock';
 import request from '../helpers/request';
-import { dbOrm } from '../../src/common';
+import { dbOrm, config } from '../../src/common';
 
 test.afterEach.always(() => {
   fetchMock.restore();
@@ -25,13 +25,13 @@ test.before(async (t) => {
     await sleep(1000);
   }
 
-  const tokenRes = await request.post('/api/account/v1/tokens').send({
+  const tokenRes = await request.post(`${config.uriPrefix}/tokens`).send({
     key: 'zt001',
     secret: 'zz^&(^)',
   });
   if (tokenRes.status >= 400) console.log(tokenRes.text);
   token = tokenRes.body.data.token;
-  const res = await request.post('/api/account/v1/tenants').send(mockTenant).set('token', token);
+  const res = await request.post(`${config.uriPrefix}/tenants`).send(mockTenant).set('token', token);
   if (res.status >= 400) console.log(res.text);
   t.is(res.status, 201);
   tenant = res.body.data;
@@ -39,8 +39,8 @@ test.before(async (t) => {
   return Promise.resolve({});
 });
 
-test('GET /api/account/v1/tenants/:id ok', async (t) => {
-  const res = await request.get(`/api/account/v1/tenants/${tenant.id}`).set('token', token);
+test(`GET ${config.uriPrefix}/tenants/:id ok`, async (t) => {
+  const res = await request.get(`${config.uriPrefix}/tenants/${tenant.id}`).set('token', token);
   if (res.status >= 400) console.log(res.text);
   t.is(res.status, 200);
   // console.log(res.body);
@@ -49,14 +49,14 @@ test('GET /api/account/v1/tenants/:id ok', async (t) => {
   t.is(tmp.name, tenant.name);
 });
 
-test('GET /api/account/v1/tenants/:id 404', async (t) => {
-  const res = await request.get('/api/account/v1/tenants/uuuaaa').set('token', token);
+test(`GET ${config.uriPrefix}/tenants/:id 404`, async (t) => {
+  const res = await request.get(`${config.uriPrefix}/tenants/uuuaaa`).set('token', token);
   if (res.status >= 400) console.log(res.text);
   t.is(res.status, 404);
   // console.log(res.body);
 });
 
-test('POST /api/account/v1/tenants/:id 200', async (t) => {
+test(`POST ${config.uriPrefix}/tenants/:id 200`, async (t) => {
   const tmpData = {
     name: `${Math.random()}test`,
   };
@@ -69,15 +69,15 @@ test('POST /api/account/v1/tenants/:id 200', async (t) => {
   t.is(tmp.href, tenant.href);
 });
 
-test('GET /api/account/v1/tenants 200', async (t) => {
-  const res = await request.get('/api/account/v1/tenants').set('token', token);
+test(`GET ${config.uriPrefix}/tenants 200`, async (t) => {
+  const res = await request.get(`${config.uriPrefix}/tenants`).set('token', token);
   if (res.status >= 400) console.log(res.text);
   t.is(res.status, 200);
   // const tmp = res.body.data;
   // console.log(tmp);
 });
 
-test('DELETE /api/account/v1/tenants/:id 204', async (t) => {
+test(`DELETE ${config.uriPrefix}/tenants/:id 204`, async (t) => {
   const res = await request.delete(gUrl).set('token', token);
   if (res.status >= 400) console.log(res.text);
   t.is(res.status, 204);

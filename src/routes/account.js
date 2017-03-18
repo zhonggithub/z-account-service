@@ -12,6 +12,10 @@ export default {
       ctx.throw(judge.error, 422);
       return;
     }
+    if (!body.tenantId) {
+      body.tenantId = ctx.request.token.tId;
+    }
+    body.directoryId = ctx.params.directoryId;
     const exist = await prp.isExist(body);
     if (exist.is) {
       const err = common.error409();
@@ -19,10 +23,6 @@ export default {
       ctx.throw(err, 409);
       return;
     }
-    if (body.tenantId) {
-      body.tenantId = ctx.request.token.tId;
-    }
-    body.directoryId = ctx.params.directoryId;
     const result = await prp.resourceProxy.create(body);
     const resData = prp.retData(result);
     ctx.body = resData;

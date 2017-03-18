@@ -2,7 +2,7 @@
  * @Author: Zz
  * @Date: 2017-01-14 21:54:41
  * @Last Modified by: Zz
- * @Last Modified time: 2017-02-28 15:46:21
+ * @Last Modified time: 2017-03-18 22:33:25
  */
 import { dbOrm, common, util, config } from '../common';
 
@@ -194,11 +194,12 @@ export default {
     }
   },
 
-  async findOr(query) {
+  async findOr(query, andQuery = {}) {
     try {
       const criteria = imp.convertQueryCriteria(query);
       const tmp = {
         or: [],
+        ...andQuery,
       };
       for (const item in criteria) {
         if (item !== 'deleteFlag') {

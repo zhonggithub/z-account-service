@@ -2,7 +2,7 @@
  * @Author: Zz
  * @Date: 2017-01-11 18:16:10
  * @Last Modified by: Zz
- * @Last Modified time: 2017-03-18 22:27:25
+ * @Last Modified time: 2017-03-18 22:34:07
  */
 import querystring from 'querystring';
 import { verify } from 'z-error';
@@ -25,7 +25,7 @@ async function isExist(info) {
       name: info.account,
       email: info.email,
       tel: info.tel,
-    });
+    }, { directoryId: info.directoryId });
     return {
       is: result.length !== 0,
       description: '',

@@ -27,7 +27,7 @@ const auth = async (ctx, next) => {
   const { token } = ctx.header;
   try {
     const tokenData = jwt.verify(token, config.jwtKey);
-    if (moment().unix() > tokenData.payload.exp) {
+    if (moment().unix() > tokenData.exp) {
       ctx.throw({ message: 'token已过期' }, 401);
     }
     ctx.request.token = tokenData;
@@ -43,7 +43,7 @@ const auth1 = async (ctx, next) => {
   const { token } = ctx.header;
   try {
     const tokenData = jwt.verify(token, config.jwtKey);
-    if (moment().unix() > tokenData.payload.exp) {
+    if (moment().unix() > tokenData.exp) {
       ctx.throw({ message: 'token已过期' }, 401);
     }
     if (tokenData.key !== config.platormTeanantKey) {
@@ -59,7 +59,7 @@ const auth1 = async (ctx, next) => {
 
 const router = new Router();
 
-const baseUrl = '/api/account/:version';
+const baseUrl = '/api/accountService/:version';
 // api gateway
 router.post(`${baseUrl}/tokens`, getBody, tokens.retrieveByIpList);
 

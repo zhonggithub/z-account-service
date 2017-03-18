@@ -1,7 +1,7 @@
 import test from 'ava';
 import fetchMock from 'fetch-mock';
 import request from '../helpers/request';
-import { dbOrm, common } from '../../src/common';
+import { dbOrm, common, config } from '../../src/common';
 
 test.afterEach.always(() => {
   fetchMock.restore();
@@ -24,18 +24,18 @@ test.before(async (t) => {
   while (!dbOrm.models.collections) {
     await sleep(1000);
   }
-  const tokenRes = await request.post('/api/account/v1/tokens').send({
+  const tokenRes = await request.post(`${config.uriPrefix}/tokens`).send({
     key: 'zt001',
     secret: 'zz^&(^)',
   });
   if (tokenRes.status >= 400) console.log(tokenRes.text);
   t.is(tokenRes.status, 200);
   token = tokenRes.body.data.token;
-  const res = await request.post('/api/account/v1/tenants').send(mockTenant).set('token', token);
+  const res = await request.post(`${config.uriPrefix}/tenants`).send(mockTenant).set('token', token);
   t.is(res.status, 201);
   tenant = res.body.data;
   tenantId = common.getIdInHref(tenant.href, '/tenants/');
-  const tmp = await request.post('/api/account/v1/tokens').send({
+  const tmp = await request.post(`${config.uriPrefix}/tokens`).send({
     key: tenant.key,
     secret: mockTenant.secret,
   });
@@ -45,8 +45,8 @@ test.before(async (t) => {
   return Promise.resolve({});
 });
 
-test('post /api/account/v1/tokens 200', async (t) => {
-  const res = await request.post('/api/account/v1/tokens').send({
+test(`post ${config.uriPrefix}/tokens 200`, async (t) => {
+  const res = await request.post(`${config.uriPrefix}/tokens`).send({
     key: tenant.key,
     secret: mockTenant.secret,
   });
@@ -56,8 +56,8 @@ test('post /api/account/v1/tokens 200', async (t) => {
   // console.log(tmp);
 });
 
-test('post /api/account/v1/tokens 404', async (t) => {
-  const res = await request.post('/api/account/v1/tokens').send({
+test(`post ${config.uriPrefix}/tokens 404`, async (t) => {
+  const res = await request.post(`${config.uriPrefix}/tokens`).send({
     key: tenant.key,
     secret: 'ww',
   });
@@ -65,8 +65,8 @@ test('post /api/account/v1/tokens 404', async (t) => {
   t.is(res.status, 404);
 });
 
-test('get /api/account/v1/tenants/:id 200', async (t) => {
-  const res = await request.get(`/api/account/v1/tenants/${tenantId}`).set('token', token);
+test(`get ${config.uriPrefix}/tenants/:id 200`, async (t) => {
+  const res = await request.get(`${config.uriPrefix}/tenants/${tenantId}`).set('token', token);
   if (res.status >= 400) console.log(res.text);
   t.is(res.status, 200);
 });
