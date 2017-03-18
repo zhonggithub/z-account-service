@@ -2,7 +2,7 @@
  * @Author: Zz
  * @Date: 2017-02-22 10:40:09
  * @Last Modified by: Zz
- * @Last Modified time: 2017-02-22 14:54:30
+ * @Last Modified time: 2017-03-18 22:27:01
  */
 import querystring from 'querystring';
 import { verify } from 'z-error';
@@ -31,10 +31,10 @@ async function isExist(info) {
 }
 
 function retData(body) {
-  const ret = common.filterData(body, ['deleteFlag', 'id']);
-  ret.href = `${config.domainHost}/api/account/v1/groups/${body.id}`;
+  const ret = common.filterData(body, ['deleteFlag']);
+  ret.href = `${config.domainHost}${config.uriPrefix}/groups/${body.id}`;
   ret.tenant = {
-    href: `${config.domainHost}/api/account/v1/tenants/${body.tenantId}`,
+    href: `${config.domainHost}${config.uriPrefix}/tenants/${body.tenantId}`,
   };
   return ret;
 }
@@ -42,7 +42,7 @@ function retData(body) {
 function retListData(query, items, size) {
   const directoryId = String(query.directoryId);
   delete query.directoryId;
-  const href = `${config.domainHost}/api/account/v1/directories/${directoryId}/groups?${querystring.stringify(query)}`;
+  const href = `${config.domainHost}${config.uriPrefix}/directories/${directoryId}/groups?${querystring.stringify(query)}`;
   return common.retListData(query, items, size, retData, href);
 }
 

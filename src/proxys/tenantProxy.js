@@ -2,7 +2,7 @@
  * @Author: Zz
  * @Date: 2017-01-11 18:16:10
  * @Last Modified by: Zz
- * @Last Modified time: 2017-01-22 15:44:36
+ * @Last Modified time: 2017-03-18 22:22:57
  */
 import { verify } from 'z-error';
 import { common, config } from '../common';
@@ -31,12 +31,12 @@ async function isExist(info) {
 
 function retData(body) {
   body = common.filterData(body, ['deleteFlag', 'secret']);
-  body.href = `${config.domainHost}/api/account/v1/tenants/${body.id}`;
+  body.href = `${config.domainHost}${config.uriPrefix}/tenants/${body.id}`;
   return body;
 }
 
 function retListData(query, items, size) {
-  const href = `${config.domainHost}/api/account/v1/tenants`;
+  const href = `${config.domainHost}${config.uriPrefix}/tenants`;
   return common.retListData(query, items, size, retData, href);
 }
 

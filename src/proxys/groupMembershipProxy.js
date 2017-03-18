@@ -2,7 +2,7 @@
  * @Author: Zz
  * @Date: 2017-01-23 18:08:18
  * @Last Modified by: Zz
- * @Last Modified time: 2017-02-23 09:24:08
+ * @Last Modified time: 2017-03-18 22:26:54
  */
 import { verify } from 'z-error';
 import { common, config } from '../common';
@@ -32,19 +32,19 @@ async function isExist() {
 }
 
 function retData(body) {
-  const ret = common.filterData(body, ['deleteFlag', 'id']);
-  ret.href = `${config.domainHost}/${config.uriPrefix}/groupMemberships/${body.id}`;
+  const ret = common.filterData(body, ['deleteFlag']);
+  ret.href = `${config.domainHost}${config.uriPrefix}/groupMemberships/${body.id}`;
   ret.group = {
-    href: `${config.domainHost}/${config.uriPrefix}/groups/${body.groupId}`,
+    href: `${config.domainHost}${config.uriPrefix}/groups/${body.groupId}`,
   };
   ret.account = {
-    href: `${config.domainHost}/${config.uriPrefix}/accounts/${body.accountId}`,
+    href: `${config.domainHost}${config.uriPrefix}/accounts/${body.accountId}`,
   };
   return ret;
 }
 
 function retListData(query, items, size) {
-  const href = `${config.domainHost}/${config.uriPrefix}/groupMemberships`;
+  const href = `${config.domainHost}${config.uriPrefix}/groupMemberships`;
   return common.retListData(query, items, size, retData, href);
 }
 

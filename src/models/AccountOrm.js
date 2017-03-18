@@ -8,12 +8,12 @@ module.exports = Waterline.Collection.extend({
   attributes: {
     name: {
       type: 'string',
-      unique: true,
+      // unique: true,
       required: true,
     },
     account: {
       type: 'string',
-      unique: true,
+      // unique: true,
       required: true,
     },
     password: {
@@ -31,12 +31,12 @@ module.exports = Waterline.Collection.extend({
     email: {
       type: 'string',
       required: true,
-      unique: true,
+      // unique: true,
     },
     tel: {
       type: 'string',
       required: true,
-      unique: true,
+      // unique: true,
     },
     customData: {
       type: 'json',

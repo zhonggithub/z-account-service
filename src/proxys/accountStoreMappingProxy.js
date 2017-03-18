@@ -2,7 +2,7 @@
  * @Author: Zz
  * @Date: 2017-01-23 18:08:18
  * @Last Modified by: Zz
- * @Last Modified time: 2017-02-22 16:05:04
+ * @Last Modified time: 2017-03-18 22:26:11
  */
 import { verify } from 'z-error';
 import { common, config } from '../common';
@@ -24,13 +24,13 @@ async function isExist() {
 }
 
 function retData(body) {
-  const ret = common.filterData(body, ['deleteFlag', 'id', 'accountStoreType']);
-  ret.href = `${config.domainHost}/${config.uriPrefix}/accountStoreMappings/${body.id}`;
+  const ret = common.filterData(body, ['deleteFlag', 'accountStoreType']);
+  ret.href = `${config.domainHost}${config.uriPrefix}/accountStoreMappings/${body.id}`;
   ret.application = {
-    href: `${config.domainHost}/${config.uriPrefix}/applications/${body.applicationId}`,
+    href: `${config.domainHost}${config.uriPrefix}/applications/${body.applicationId}`,
   };
   ret.accountStore = {
-    href: `${config.domainHost}/${config.uriPrefix}/${body.accountStoreType === 0 ? 'directories' : 'groups'}/${body.accountStoreId}`,
+    href: `${config.domainHost}${config.uriPrefix}/${body.accountStoreType === 0 ? 'directories' : 'groups'}/${body.accountStoreId}`,
   };
   return ret;
 }

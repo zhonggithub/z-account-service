@@ -2,7 +2,7 @@
  * @Author: Zz
  * @Date: 2017-01-16 22:10:38
  * @Last Modified by: Zz
- * @Last Modified time: 2017-03-01 10:00:14
+ * @Last Modified time: 2017-03-18 21:09:54
  */
 import lodash from 'lodash';
 import { verify, ZError } from 'z-error';
@@ -191,7 +191,7 @@ export default {
     }
     // 查找账号
     const accounts = await accountOperator.list(certain);
-    if (accounts.length !== 1) {
+    if (accounts.length === 0) {
       const error2 = common.error404();
       error2.message = '用户名或密码错误！';
       ctx.threow(error2, 404);
