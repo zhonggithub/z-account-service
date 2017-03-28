@@ -207,7 +207,8 @@ class Common {
             }
           }
           filterAttributeArray.push(condition);
-        } break;
+          break;
+        }
         case 'createdAt':
         case 'updatedAt': {
           dbCriteria[condition] = {};
@@ -252,10 +253,11 @@ class Common {
             dbCriteria[condition] = criteria[condition];
           }
           filterAttributeArray.push(condition);
-        } break;
+          break;
+        }
         case 'expand':
           break;
-        case 'name': {
+        case 'name':
           if (criteria[condition].indexOf('*') === -1) {
             dbCriteria[condition] = criteria[condition];
           } else {
@@ -264,7 +266,7 @@ class Common {
             dbCriteria[condition] = { like: str };
           }
           filterAttributeArray.push(condition);
-        } break;
+          break;
         default:
           if (isDefault) {
             dbCriteria[condition] = criteria[condition];
@@ -330,7 +332,8 @@ class Common {
           } else {
             dbCriteria[condition] = criteria[condition];
           }
-        } break;
+          break;
+        }
         case 'name': {
           if (criteria[condition].indexOf('*') === -1) {
             dbCriteria[condition] = criteria[condition];
@@ -339,7 +342,8 @@ class Common {
             const str = criteria[condition].replace(reg, '%');
             dbCriteria[condition] = { like: str };
           }
-        } break;
+          break;
+        }
         default:
           if (isDefault) {
             dbCriteria[condition] = criteria[condition];
