@@ -1,4 +1,4 @@
-FROM hub.c.163.com/nce2/nodejs:0.12.2
+FROM hub.c.163.com/public/nodejs:5.7.0
 
 RUN mkdir /app
 WORKDIR /app
