@@ -2,7 +2,7 @@
  * @Author: Zz
  * @Date: 2017-01-14 21:54:41
  * @Last Modified by: Zz
- * @Last Modified time: 2017-03-18 22:33:25
+ * @Last Modified time: 2017-03-28 14:49:27
  */
 import { dbOrm, common, util, config } from '../common';
 
@@ -69,7 +69,8 @@ const imp = {
             const str = criteria[condition].replace(reg, '%');
             dbCriteria[`canton.${condition}`] = { like: str };
           }
-        } break;
+          break;
+        }
         default:
           dbCriteria[condition] = tmpCriteria[condition];
           break;

@@ -2,7 +2,7 @@
  * @Author: Zz
  * @Date: 2017-01-02 16:22:01
  * @Last Modified by: Zz
- * @Last Modified time: 2017-01-23 10:35:09
+ * @Last Modified time: 2017-03-28 14:48:44
  */
 import Koa from 'koa';
 import koaConvert from 'koa-convert';
@@ -78,7 +78,6 @@ dbOrm.orm.initialize(dbConfig, (err, models) => {
     }
     if (!module.parent) {
       app.listen(process.env.PORT);
-      console.log(`listen: ${process.env.PORT}`);
     }
   });
 });
