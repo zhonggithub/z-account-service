@@ -6,6 +6,5 @@ WORKDIR /app
 COPY . /app
 RUN npm i --registry=https://registry.npm.taobao.org
 RUN npm run build
-RUN cp -r /app/dist /app/dist
 CMD ["node", "/app/dist/app.js"]
 EXPOSE 3000
