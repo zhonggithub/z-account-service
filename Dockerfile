@@ -1,7 +1,12 @@
-FROM hub.c.163.com/public/nodejs:5.7.0
+FROM FROM node:6
 
 RUN mkdir /app
 WORKDIR /app
+
+ENV PORT=3000
+ENV LOG_LEVEL=info
+ENV NODE_ENV=production
+ENV MONGO_DB=mongodb://mongodb/z-account-service
 
 COPY . /app
 RUN npm i --registry=https://registry.npm.taobao.org
