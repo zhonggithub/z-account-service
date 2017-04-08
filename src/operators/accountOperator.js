@@ -2,7 +2,7 @@
  * @Author: Zz
  * @Date: 2017-01-14 21:54:41
  * @Last Modified by: Zz
- * @Last Modified time: 2017-03-28 14:49:27
+ * @Last Modified time: 2017-04-08 12:09:58
  */
 import { dbOrm, common, util, config } from '../common';
 
@@ -161,10 +161,11 @@ export default {
     }
   },
 
-  async list(query) {
+  async list(query, select) {
     try {
       const criteria = imp.convertQueryCriteria(query);
-      const ret = await imp.resourceModule().find(criteria);
+      // const ret = await imp.resourceModule().find(criteria);
+      const ret = select ? await imp.resourceModule().find({ ...criteria, select }) : await imp.resourceModule().find(criteria);
       const infoArray = ret.map(item => convert2LogicInfo(item));
       return Promise.resolve(infoArray);
     } catch (error) {

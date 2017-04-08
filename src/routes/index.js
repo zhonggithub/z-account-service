@@ -81,6 +81,8 @@ router.get(applicationBaseUrl, auth, application.list);
 router.post(applicationUrl, auth, getBody, application.update);
 router.delete(applicationUrl, auth, application.logicDelete);
 router.post(`${applicationUrl}/loginAttempts`, auth, application.loginAttempts);
+router.post(`${applicationUrl}/accounts`, auth, application.createAccount);
+router.post(`${applicationUrl}/groups`, auth, application.createGroup);
 
 // directory
 const directoryBaseUrl = `${baseUrl}/directories`;

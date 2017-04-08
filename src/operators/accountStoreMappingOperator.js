@@ -2,14 +2,14 @@
  * @Author: Zz
  * @Date: 2017-01-23 18:02:00
  * @Last Modified by: Zz
- * @Last Modified time: 2017-03-28 14:49:39
+ * @Last Modified time: 2017-04-08 11:21:41
  */
 import { dbOrm, common } from '../common';
 
 class ResourceDBInfo {
   constructor(logicInfo) {
     if (logicInfo.accountStore.href.indexOf('groups') !== -1) {
-      this.accountStoreId = common.getIdInHref(logicInfo.accountStore.href, '/groups');
+      this.accountStoreId = common.getIdInHref(logicInfo.accountStore.href, '/groups/');
     } else {
       this.accountStoreId = common.getIdInHref(logicInfo.accountStore.href, '/directories/');
     }
@@ -125,10 +125,10 @@ export default {
     }
   },
 
-  async list(query) {
+  async list(query, select) {
     try {
       const criteria = imp.convertQueryCriteria(query);
-      const ret = await imp.resourceModule().find(criteria);
+      const ret = select ? await imp.resourceModule().find({ ...criteria, select }) : await imp.resourceModule().find(criteria);
       const infoArray = ret.map(item => convert2LogicInfo(item));
       return Promise.resolve(infoArray);
     } catch (error) {
