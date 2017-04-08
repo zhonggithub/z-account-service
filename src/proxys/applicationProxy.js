@@ -2,8 +2,9 @@
  * @Author: Zz
  * @Date: 2017-01-16 21:59:23
  * @Last Modified by: Zz
- * @Last Modified time: 2017-03-18 22:26:37
+ * @Last Modified time: 2017-04-08 15:56:27
  */
+import querystring from 'querystring';
 import { verify } from 'z-error';
 import { common, config } from '../common';
 import { applicationOperator } from '../operators';
@@ -39,7 +40,21 @@ function retData(body) {
 }
 
 function retListData(query, items, size) {
-  const href = `${config.domainHost}${config.uriPrefix}/applications`;
+  const href = `${config.domainHost}${config.uriPrefix}/applications?${querystring.stringify(query)}`;
+  return common.retListData(query, items, size, retData, href);
+}
+
+function retAccountData(body) {
+  const tmp = common.filterData(body, ['deleteFlag']);
+  tmp.tenant = {
+    href: `${config.domainHost}${config.uriPrefix}/tenants/${body.tenantId}`,
+  };
+  tmp.href = `${config.domainHost}${config.uriPrefix}/directories/${body.directoryId}/accounts/${body.id}`;
+  return tmp; 
+}
+
+function retListAccounts(applicationId, query, items, size) {
+  const href = `${config.domainHost}${config.uriPrefix}/applications/${applicationId}/accounts?${querystring.stringify(query)}`;
   return common.retListData(query, items, size, retData, href);
 }
 
@@ -54,4 +69,5 @@ module.exports = {
   retData,
   retListData,
   isValidUpateData,
+  retListAccounts,
 };

@@ -2,7 +2,7 @@
  * @Author: Zz
  * @Date: 2017-01-16 22:33:18
  * @Last Modified by: Zz
- * @Last Modified time: 2017-03-18 23:02:10
+ * @Last Modified time: 2017-04-08 15:57:15
  */
 import test from 'ava';
 import fetchMock from 'fetch-mock';
@@ -39,7 +39,7 @@ test.before(async (t) => {
   if (tokenRes.status >= 400) console.log(tokenRes.text);
   token = tokenRes.body.data.token;
 
-  const res1 = await request.post(`${config.uriPrefix}/applications`).set('token', token)
+  const res1 = await request.post(`${config.uriPrefix}/applications?createDirectory=true`).set('token', token)
   .send(mockApplication);
   if (res1.status >= 400) console.log(res1.text);
   t.is(res1.status, 201);
@@ -75,11 +75,18 @@ test(`POST ${config.uriPrefix}/applications/:id`, async (t) => {
   t.is(tmp.tenantId, application.tenantId);
 });
 
-test(`GET ${config.uriPrefix}/applications`, async (t) => {
+test(`post ${config.uriPrefix}/applications`, async (t) => {
   const description = 'zz test app';
   const res = await request.post(gUrl).send({
     description,
   }).set('token', token);
+  if (res.status >= 400) console.log(res.text);
+  t.is(res.status, 200);
+  // console.log(res.body);
+});
+
+test(`GET ${config.uriPrefix}/applications/:id/accounts`, async (t) => {
+  const res = await request.get(`${gUrl}/accounts`).set('token', token);
   if (res.status >= 400) console.log(res.text);
   t.is(res.status, 200);
   // console.log(res.body);

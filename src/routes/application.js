@@ -2,7 +2,7 @@
  * @Author: Zz
  * @Date: 2017-01-16 22:10:38
  * @Last Modified by: Zz
- * @Last Modified time: 2017-04-08 12:16:33
+ * @Last Modified time: 2017-04-08 15:50:25
  */
 import lodash from 'lodash';
 import { verify, ZError } from 'z-error';
@@ -39,7 +39,7 @@ export default {
           href: `/groups/${directory.id}`,
         },
         application: {
-          href: `/groups/${result.id}`,
+          href: `/applications/${result.id}`,
         },
         tenantId: ctx.request.token.tId,
         isDefaultAccountStore: true,
@@ -347,8 +347,9 @@ export default {
 
   async listAccount(ctx) {
     const select = ['accountStoreId'];
+    const applicationId = ctx.params.id;
     const tmpCertain = {
-      applicationId: ctx.params.id,
+      applicationId,
       accountStoreType: 0,
     };
     const stores0 = await accountStoreMappingOperator.list(tmpCertain, select);
@@ -366,7 +367,7 @@ export default {
     const query = { ...ctx.request.query, directoryId: directoryIds };
     const result = await accountOperator.list(query);
     const total = await prp.resourceProxy.count(query);
-    ctx.body = accountProxy.retListData(query, result, total);
+    ctx.body = prp.retListAccounts(applicationId, query, result, total);
     ctx.status = 200;
   },
 };
