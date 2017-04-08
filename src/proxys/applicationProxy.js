@@ -2,7 +2,7 @@
  * @Author: Zz
  * @Date: 2017-01-16 21:59:23
  * @Last Modified by: Zz
- * @Last Modified time: 2017-04-08 15:56:27
+ * @Last Modified time: 2017-04-08 19:54:21
  */
 import querystring from 'querystring';
 import { verify } from 'z-error';
@@ -50,12 +50,12 @@ function retAccountData(body) {
     href: `${config.domainHost}${config.uriPrefix}/tenants/${body.tenantId}`,
   };
   tmp.href = `${config.domainHost}${config.uriPrefix}/directories/${body.directoryId}/accounts/${body.id}`;
-  return tmp; 
+  return tmp;
 }
 
 function retListAccounts(applicationId, query, items, size) {
   const href = `${config.domainHost}${config.uriPrefix}/applications/${applicationId}/accounts?${querystring.stringify(query)}`;
-  return common.retListData(query, items, size, retData, href);
+  return common.retListData(query, items, size, retAccountData, href);
 }
 
 function isValidUpateData() {
