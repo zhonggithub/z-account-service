@@ -2,7 +2,7 @@
  * @Author: Zz
  * @Date: 2017-01-16 22:10:38
  * @Last Modified by: Zz
- * @Last Modified time: 2017-04-09 19:07:57
+ * @Last Modified time: 2017-04-09 20:47:43
  */
 import lodash from 'lodash';
 import { verify, ZError } from 'z-error';
@@ -149,7 +149,7 @@ export default {
 
   async loginAttempts(ctx) {
     const body = ctx.request.body;
-    let error = verify(body, ['type', 'value', 'tag']);
+    let error = verify(body, ['type', 'value']);
     if (error) {
       ctx.throw(error, 422);
       return;
