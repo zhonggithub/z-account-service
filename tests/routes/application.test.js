@@ -2,7 +2,7 @@
  * @Author: Zz
  * @Date: 2017-01-16 22:33:18
  * @Last Modified by: Zz
- * @Last Modified time: 2017-04-08 15:57:15
+ * @Last Modified time: 2017-04-09 21:31:16
  */
 import test from 'ava';
 import fetchMock from 'fetch-mock';
@@ -91,6 +91,14 @@ test(`GET ${config.uriPrefix}/applications/:id/accounts`, async (t) => {
   t.is(res.status, 200);
   // console.log(res.body);
 });
+
+// test(`POST ${config.uriPrefix}/applications/:id/loginAttempts`, async (t) => {
+//   const value = new Buffer('admin:admin').toString('base64');
+//   const res = await request.post(`${gUrl}/loginAttempts`).send({ value, type: 'basic' }).set('token', token);
+//   if (res.status >= 400) console.log(res.text);
+//   t.is(res.status, 200);
+//   // console.log(res.body);
+// });
 
 test.serial(`DELETE ${config.uriPrefix}/applications/:id`, async (t) => {
   const res = await request.delete(gUrl).set('token', token);

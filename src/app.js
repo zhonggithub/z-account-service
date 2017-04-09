@@ -2,7 +2,7 @@
  * @Author: Zz
  * @Date: 2017-01-02 16:22:01
  * @Last Modified by: Zz
- * @Last Modified time: 2017-03-28 14:48:44
+ * @Last Modified time: 2017-04-09 21:39:26
  */
 import Koa from 'koa';
 import koaConvert from 'koa-convert';
@@ -72,12 +72,18 @@ dbOrm.orm.initialize(dbConfig, (err, models) => {
   }
   dbOrm.models = models;
   dbOrm.collections = models.collections;
-  initDB((error) => {
-    if (error) {
-      throw error;
-    }
+  if (process.env.NODE_ENV === 'production') {
     if (!module.parent) {
       app.listen(process.env.PORT);
     }
-  });
+  } else {
+    initDB((error) => {
+      if (error) {
+        throw error;
+      }
+      if (!module.parent) {
+        app.listen(process.env.PORT);
+      }
+    });
+  }
 });

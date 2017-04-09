@@ -2,7 +2,7 @@
  * @Author: Zz
  * @Date: 2017-01-16 22:10:38
  * @Last Modified by: Zz
- * @Last Modified time: 2017-04-09 20:47:43
+ * @Last Modified time: 2017-04-09 21:30:17
  */
 import lodash from 'lodash';
 import { verify, ZError } from 'z-error';
@@ -166,18 +166,18 @@ export default {
     const bo = common.verifyValue(body.type, ['basic']);
     const error1 = new ZError('Error', 422, '', 'en', '非法参数！');
     if (!bo) {
-      error1.description = 'type 是无效的参数！';
+      error1.message = 'type 是无效的参数！';
       ctx.throw(error1, 422);
     }
     // bo = common.verifyValue(body.tag, ['NP', 'MP', 'EP', 'MV']);
     // if (!bo) {
-    //   error1.description = 'tag 是无效的参数！有效参数为 NP, MP, EP, MV';
+    //   error1.message = 'tag 是无效的参数！有效参数为 NP, MP, EP, MV';
     //   ctx.throw(error1, 422);
     // }
     let credentials = new Buffer(body.value, 'base64').toString();
     credentials = credentials.split(':');
     if (credentials.length !== 2) {
-      error1.description = 'value 是无效的参数!';
+      error1.message = `value${body.value} 是无效的参数!`;
       ctx.throw(error1, 422);
     }
     const certain = {
@@ -215,7 +215,7 @@ export default {
     if (accounts.length === 0) {
       const error2 = common.error404();
       error2.message = '用户名或密码错误！';
-      ctx.threow(error2, 404);
+      ctx.throw(error2, 404);
     }
     const account = accounts[0];
 
@@ -254,7 +254,7 @@ export default {
     if (results.length === 0) {
       const error2 = common.error404();
       error2.message = '该app下没有关联该账号！';
-      ctx.threow(error2, 404);
+      ctx.throw(error2, 404);
     }
     ctx.status = 200;
     ctx.body = account;
