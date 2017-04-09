@@ -30,7 +30,7 @@ module.exports = (callback) => {
     return accountOperator.create({
       name: 'admin',
       account: 'admin',
-      password: 'zhaozhi20160711',
+      password: 'admin',
       tenantId,
       directoryId,
       email: '1006817093@qq.com',
