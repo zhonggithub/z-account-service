@@ -6,4 +6,5 @@ export default {
   aesKey: 'z2#$)^zhj78',
   platormTeanantKey: 'zt001',
   uriPrefix: '/api/accountService/v1',
+  initDB: false,
 };

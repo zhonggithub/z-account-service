@@ -2,7 +2,7 @@
  * @Author: Zz
  * @Date: 2017-01-02 16:22:01
  * @Last Modified by: Zz
- * @Last Modified time: 2017-04-09 21:39:26
+ * @Last Modified time: 2017-04-09 22:06:32
  */
 import Koa from 'koa';
 import koaConvert from 'koa-convert';
@@ -13,7 +13,7 @@ import { setLocal } from 'z-error';
 import './env';
 import initDB from './initDB';
 import routes from './routes';
-import { dbOrm } from './common';
+import { dbOrm, config } from './common';
 import dbConfig from './dbConfig';
 
 setLocal('zh-cn');
@@ -72,11 +72,7 @@ dbOrm.orm.initialize(dbConfig, (err, models) => {
   }
   dbOrm.models = models;
   dbOrm.collections = models.collections;
-  if (process.env.NODE_ENV === 'production') {
-    if (!module.parent) {
-      app.listen(process.env.PORT);
-    }
-  } else {
+  if (config.initDB === true || process.env.NODE_ENV === 'test') {
     initDB((error) => {
       if (error) {
         throw error;
@@ -85,5 +81,9 @@ dbOrm.orm.initialize(dbConfig, (err, models) => {
         app.listen(process.env.PORT);
       }
     });
+    return;
+  }
+  if (!module.parent) {
+    app.listen(process.env.PORT);
   }
 });
