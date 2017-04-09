@@ -2,7 +2,7 @@
  * @Author: Zz
  * @Date: 2017-01-16 22:10:38
  * @Last Modified by: Zz
- * @Last Modified time: 2017-04-08 15:50:25
+ * @Last Modified time: 2017-04-09 19:07:57
  */
 import lodash from 'lodash';
 import { verify, ZError } from 'z-error';
@@ -163,17 +163,17 @@ export default {
       }
     }
     // 验证参数格式合法性
-    let bo = common.verifyValue(body.type, ['basic']);
+    const bo = common.verifyValue(body.type, ['basic']);
     const error1 = new ZError('Error', 422, '', 'en', '非法参数！');
     if (!bo) {
       error1.description = 'type 是无效的参数！';
       ctx.throw(error1, 422);
     }
-    bo = common.verifyValue(body.tag, ['NP', 'MP', 'EP', 'MV']);
-    if (!bo) {
-      error1.description = 'tag 是无效的参数！有效参数为 NP, MP, EP, MV';
-      ctx.throw(error1, 422);
-    }
+    // bo = common.verifyValue(body.tag, ['NP', 'MP', 'EP', 'MV']);
+    // if (!bo) {
+    //   error1.description = 'tag 是无效的参数！有效参数为 NP, MP, EP, MV';
+    //   ctx.throw(error1, 422);
+    // }
     let credentials = new Buffer(body.value, 'base64').toString();
     credentials = credentials.split(':');
     if (credentials.length !== 2) {
@@ -183,20 +183,31 @@ export default {
     const certain = {
       tenantId: ctx.request.token.tId,
     };
+    const password = util.md5Encode(util.aesEncode(credentials[1], config.aesKey));
     switch (body.tag) {
       case 'NP': // name:password
         certain.name = credentials[0];
-        certain.password = util.md5Encode(util.aesEncode(credentials[1], config.aesKey));
+        certain.password = password;
         break;
       case 'MP':
         certain.tel = credentials[0];
-        certain.password = util.md5Encode(util.aesEncode(credentials[1], config.aesKey));
+        certain.password = password;
         break;
       case 'EP':
         certain.email = credentials[0];
-        certain.password = util.md5Encode(util.aesEncode(credentials[1], config.aesKey));
+        certain.password = password;
         break;
       default:
+        certain.or = [{
+          name: credentials[0],
+          password,
+        }, {
+          tel: credentials[0],
+          password,
+        }, {
+          email: credentials[0],
+          password,
+        }];
         break;
     }
     // 查找账号
